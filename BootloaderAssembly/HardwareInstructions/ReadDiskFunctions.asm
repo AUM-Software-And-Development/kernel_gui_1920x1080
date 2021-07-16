@@ -11,8 +11,9 @@
 ; CF = 0 (if success)
 ; CF = 1 (if error)
 
-; The documentation recommends the programmer attempts at least 3 times to read a disk if there's an error.
-; That would be due to potential for traffic noise (talking) on the bus/motherboard, or mechanical bouncing.
+; The documentation recommends that the programmer attempt to read a disk at least 3 times if it fails.
+; This is because motherboards can have unexpected noise or circuitry bounces from its processes, 
+; or depending on build quality.
 
 ReadDisk:
     mov di, readDiskString
@@ -48,3 +49,11 @@ readDiskErrorString:
 
 readDiskSuccessString:
     db "The disk was read without error.", 0
+
+; Registers are summable; EG: mov ch, 0 \n mov cl, 2 is equal to writing one code line: mov cx, 0000000000000010b
+; or mov cx, 0x2 in hexadecimal
+
+; The reason that I don't do that, is because these types of things are hardcoded into some of the hardware
+; setup patterns, and it makes things very daunting for newcomers to boot into protected modes.
+; I don't believe that it's necessary to learn things the hard way, and I'd rather see people get started first,
+; then come back to learn some of the more in depth details when they feel they are ready.
