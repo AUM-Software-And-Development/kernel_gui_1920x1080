@@ -6,7 +6,7 @@
 	call DisplayString
 	call DisplayNewLine
 
-	jmp EnterProtectedMode
+	jmp EnterProtectedMode32Bits
 
 postBootSetupString:
 	db "The boot from a disk was a success.", 0
@@ -23,14 +23,14 @@ AfterGDTCodeDescriptor: equ GDTCodeDescriptor - GDTNullDescriptor
 AfterGDTDataDescriptor: equ GDTDataDescriptor - GDTNullDescriptor
                                                 ; The label gets the code or data section, but is named
                                                 ; to make its function more understandable during the "long" jump
-EnterProtectedMode:
+EnterProtectedMode32Bits:
 	call EnableA20
 	cli
 	lgdt [GDTDescriptor]
 	mov eax, cr0
 	or eax, 1
 	mov cr0, eax
-	jmp AfterGDTCodeDescriptor:ProtectedMode
+	jmp AfterGDTCodeDescriptor:ProtectedMode32Bits
 
 EnableA20:
 	in al, 0x92
@@ -40,7 +40,7 @@ EnableA20:
 
 [bits 32]                                       ; From this point on, BIOS interrupts aren't operational
 
-ProtectedMode:
+ProtectedMode32Bits:
 	mov ax, AfterGDTDataDescriptor
 	mov ds, ax
 	mov es, ax
@@ -59,6 +59,34 @@ ProtectedMode:
 	mov [0xB8010], byte 'e'
 	mov [0xB8012], byte 'l'
 	mov [0xB8014], byte '.'
+
+	jmp EnterProtectedMode64Bits
+
+
+
+;;;___CHANGE TO 64 BIT PROTECTED MODE HERE___;;;
+
+%include "../BootloaderAssembly/BootModeInstructions/CentralProcessingUnitIdentifier.asm"
+%include "../BootloaderAssembly/BootModeInstructions/SimplePaging.asm"
+
+EnterProtectedMode64Bits:
+	call DetectCPUID
+	call DetectLongModeSupport
+	call IdentityPagingSetup
+
+UpdateGlobalDescriptorTable:
+	mov [GDTCodeDescriptor + 6], byte 10101111b
+	mov [GDTDataDescriptor + 6], byte 10101111b
+
+	jmp AfterGDTCodeDescriptor:ProtectedMode64Bits
+
+[bits 64]
+
+ProtectedMode64Bits:
+	mov edi, 0xB8000
+	mov rax, 0x1F201F201F201F20                 ; 1F=foreground:white/background:blue, 20=space
+	mov ecx, 500
+	rep stosq
 
 	jmp $
 
