@@ -1,4 +1,4 @@
-PAGE_TABLE_ADDRESS equ 0x2000                   ; Don't overwrite the Post Boot Section
+PAGE_TABLE_ADDRESS: equ 0x2000                  ; Don't overwrite the Post Boot Section
 
 IdentityPagingSetup:
 	mov edi, PAGE_TABLE_ADDRESS
