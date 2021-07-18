@@ -21,22 +21,22 @@ ReadDisk:
     call DisplayNewLine
 
     mov ah, 0x02                                ; BIOS disk read function
-    mov al, 4                                   ; Amount of sectors to read
+    mov al, 6                                   ; Amount of sectors to read
     mov ch, 0                                   ; Cylinder
     mov cl, 2                                   ; Sector
-    mov bx, KERNEL_ADDRESS                      ; Address to load to
+    mov bx, POST_BOOT_SETUP_ADDRESS             ; Address to load to
     mov dh, 0                                   ; Head
     mov dl, [BOOT_DISK]                         ; Disk
 
     int 0x13
-    jc .error
+    jc .readDiskError
 
     mov di, readDiskSuccessString
     call DisplayString
     call DisplayNewLine
 
     ret
-.error:
+.readDiskError:
     mov di, readDiskErrorString
     call DisplayString
     call DisplayNewLine

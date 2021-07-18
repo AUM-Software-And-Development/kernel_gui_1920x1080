@@ -1,13 +1,13 @@
-PAGE_TABLE_ADDRESS: equ 0x2000                  ; Don't overwrite the Post Boot Section
+PAGE_TABLE_ADDRESS: equ 0x1000                  ; Don't overwrite the Post Boot Section
 
 IdentityPagingSetup:
 	mov edi, PAGE_TABLE_ADDRESS
 	mov cr3, edi                                ; Places address into memory management unit to start there
+	mov dword [edi], 0x2003
+	add edi, 0x1000
 	mov dword [edi], 0x3003
 	add edi, 0x1000
 	mov dword [edi], 0x4003
-	add edi, 0x1000
-	mov dword [edi], 0x5003
 	add edi, 0x1000
 	mov ebx, 0x00000003
 	mov ecx, 512
