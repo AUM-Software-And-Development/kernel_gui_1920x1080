@@ -2,9 +2,9 @@
 
 • Docker build:
 
-	{OS24 - Development Directory/Compilation/On_Windows/Docker}
+	{OS24 - Development Directory/Compilation/On_Windows}
 	Run this command from a terminal within the above folder structure 
-	where the dockerfile is stored:
+	where the Docker folder is stored:
 	   docker build Docker -t os24development
 
 	Then run this command to use Ubuntu's terminal/functionality:
