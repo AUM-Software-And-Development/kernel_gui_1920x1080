@@ -2,7 +2,7 @@
 #define BLUE 0x000000FF
 #define RED  0x00FF0000
 
-extern void Exposed_Kernel()
+void Exposed_Kernel()
 {
     typedef unsigned char uint8_t;
     typedef char int8_t;
@@ -20,6 +20,5 @@ extern void Exposed_Kernel()
         modeInfoBlock_Framebuffer[i] = RED;
     }
 
-    __asm("cli");
-    __asm("hlt");
+    return;
 }

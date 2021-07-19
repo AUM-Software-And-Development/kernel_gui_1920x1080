@@ -10,6 +10,7 @@
 
 Boot_Setup_Directory = ../../AssemblyLanguageBootloader/
 Kernel_Setup_Directory = ../../HighLevelLanguageKernel/
+Kernel_Link_Directory = ../Link/
 
 Boot_Setup_ASM_Binary_Out = Bootloader
 Boot_Setup_ASM_Object_Out = PostBootSetup
@@ -36,9 +37,7 @@ CCompiler_Flags = -std=c17 -m32 -march=i386 -ffreestanding -fno-builtin -nostdin
 # If the recursive link isn't placed on the label, the makefile will fail with an error saying the command wasn't found.
 # If that happens, then just move the recursive link up to the same line as the label.
 Boot_Setup.flp: $(Boot_Setup_ASM_Binary_Out) $(Boot_Setup_ASM_Object_Out) $(Kernel_Setup_C_Files)
-	ld -m elf_i386 -o Exposed_Kernel.tmp -Ttext 0x7E00 PostBootSetup.o Exposed_Kernel.o
-
-	objcopy -O binary Exposed_Kernel.tmp Exposed_Kernel.bin
+	ld -m elf_i386 -T$(Kernel_Link_Directory)/$(Kernel_Setup_C_Files).ld
 
 	cat Bootloader.bin Exposed_Kernel.bin > Boot_Setup.flp
 

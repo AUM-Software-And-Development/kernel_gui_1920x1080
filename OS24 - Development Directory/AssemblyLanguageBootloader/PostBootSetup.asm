@@ -1,4 +1,4 @@
-; [org 0x7E00] Linker sets this
+; [org 0x1000] Linker sets this
 [bits 16]
 
 ;;;___ARRIVE FROM THE BOOTLOADER HERE IN THE DEFAULT 16 BIT REAL MODE___;;;
@@ -55,12 +55,22 @@ ProtectedMode32Bits:
 	rep movsd                                   ; Shifts entire block by 32 bits onto 5000h
 
 	call VESAClearScreen
-	call Exposed_Kernel                         ; The kernel is entirely in C. This jump leads to data defined by the linker
+	call Exposed_Kernel                          ; The kernel is entirely in C. This jump leads to data defined by the linker
+	cli
+	hlt
+
+VESA_MODE_INFO_BLOCK_ADDRESS: equ 0x6000
 %include "../../HighLevelLanguageKernel/KernelHost.asm"
 
+times 8192-($-$$) db 0
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
+
+; While 64 bit mode is bootable; for now, I have no intention to extend these functions into it.
+; Over time I will, but I feel that 32 bits with VESA is a better starting point.
 
 ;;;___CHANGE TO 64 BIT PROTECTED MODE HERE___;;;
 
@@ -88,7 +98,3 @@ ProtectedMode32Bits:
 
 ; 	cli
 ; 	hlt
-
-VESA_MODE_INFO_BLOCK_ADDRESS: equ 0x6000
-
-times 8192-($-$$) db 0
