@@ -1,4 +1,4 @@
-[org 0x7E00]
+; [org 0x7E00] Linker sets this
 [bits 16]
 
 ;;;___ARRIVE FROM THE BOOTLOADER HERE IN THE DEFAULT 16 BIT REAL MODE___;;;
@@ -55,7 +55,8 @@ ProtectedMode32Bits:
 	rep movsd                                   ; Shifts entire block by 32 bits onto 5000h
 
 	call VESAClearScreen
-	hlt
+	call Exposed_Kernel                         ; The kernel is entirely in C. This jump leads to data defined by the linker
+%include "../../HighLevelLanguageKernel/KernelHost.asm"
 
 
 

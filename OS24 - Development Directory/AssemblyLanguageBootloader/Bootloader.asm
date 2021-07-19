@@ -1,8 +1,6 @@
 [org 0x7C00]
 
     mov [BOOT_DISK], dl
-    mov bp, ORIGIN_ADDRESS
-    mov sp, bp
 
     mov di, bootloaderString
     call DisplayString

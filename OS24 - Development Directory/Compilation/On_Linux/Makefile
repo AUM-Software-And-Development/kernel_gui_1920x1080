@@ -9,7 +9,17 @@
 
 
 Boot_Setup_Directory = ../../AssemblyLanguageBootloader/
-Boot_Setup_ASM_Files = Bootloader PostBootSetup
+Kernel_Setup_Directory = ../../HighLevelLanguageKernel/
+
+Boot_Setup_ASM_Binary_Out = Bootloader
+Boot_Setup_ASM_Object_Out = PostBootSetup
+
+Kernel_Setup_C_Files = Exposed_Kernel
+
+ASMCompiler = nasm
+
+CCompiler = clang
+CCompiler_Flags = -std=c17 -m32 -march=i386 -ffreestanding -fno-builtin -nostdinc -O1
 # Stores the directory of these ASM files
 # Stores the general file names in a variable array
 
@@ -22,8 +32,15 @@ Boot_Setup_ASM_Files = Bootloader PostBootSetup
 
 
 # Link the label to the recursive function defined by the variable "Boot_Setup_ASM_Files".
-Boot_Setup.flp: $(Boot_Setup_ASM_Files)
-	cat Bootloader.bin PostBootSetup.bin > Boot_Setup.flp
+# NOTE: Makefile conventions require the recursive link to be on the same line as the label.
+# If the recursive link isn't placed on the label, the makefile will fail with an error saying the command wasn't found.
+# If that happens, then just move the recursive link up to the same line as the label.
+Boot_Setup.flp: $(Boot_Setup_ASM_Binary_Out) $(Boot_Setup_ASM_Object_Out) $(Kernel_Setup_C_Files)
+	ld -m elf_i386 -o Exposed_Kernel.tmp -Ttext 0x7E00 PostBootSetup.o Exposed_Kernel.o
+
+	objcopy -O binary Exposed_Kernel.tmp Exposed_Kernel.bin
+
+	cat Bootloader.bin Exposed_Kernel.bin > Boot_Setup.flp
 
 	mv *.bin ../Binary
 	mv *.flp ../Floppy
@@ -31,5 +48,12 @@ Boot_Setup.flp: $(Boot_Setup_ASM_Files)
 
 # For each file name in the array labeled "Boot_Setup_ASM_Files", run NASM, and append the file name ($@.asm ; $@.bin).
 # to the following file type.
-$(Boot_Setup_ASM_Files):
-	nasm $(Boot_Setup_Directory)$@.asm -f bin -o $@.bin
+$(Boot_Setup_ASM_Binary_Out):
+	$(ASMCompiler) $(Boot_Setup_Directory)$@.asm -f bin -o $@.bin
+
+$(Boot_Setup_ASM_Object_Out):
+	$(ASMCompiler) $(Boot_Setup_Directory)$@.asm -f elf32 -o $@.o
+
+$(Kernel_Setup_C_Files):
+	$(CCompiler) -c $(CCompiler_Flags) -o $@.o $(Kernel_Setup_Directory)$@.c
+# ld -m elf_i386 -T$@.ld $@.o --oformat binary -o $@.bin
