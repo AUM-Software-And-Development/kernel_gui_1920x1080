@@ -21,7 +21,7 @@ ReadDisk:
     call DisplayNewLine
 
     mov ah, 0x02                                ; BIOS disk read function
-    mov al, 6                                   ; Amount of sectors to read
+    mov al, 16                                  ; Amount of sectors to read
     mov ch, 0                                   ; Cylinder
     mov cl, 2                                   ; Sector
     mov bx, POST_BOOT_SETUP_ADDRESS             ; Address to load to

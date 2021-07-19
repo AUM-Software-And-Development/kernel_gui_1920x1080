@@ -50,25 +50,11 @@ ProtectedMode32Bits:
 	mov ss, ax
 
 	mov esi, mode_info_block                    ; Places the mode info block address onto memory to work with
-	mov edi, 0x5000
+	mov edi, VESA_MODE_INFO_BLOCK_ADDRESS		; Give space to perform the 64 bit mode change later
 	mov ecx, 64                                 ; Mode info block=256 byte / 4 = the number of double words
 	rep movsd                                   ; Shifts entire block by 32 bits onto 5000h
 
 	call VESAClearScreen
-
-	mov [0xB8000], byte '3'
-	mov [0xB8002], byte '2'
-	mov [0xB8004], byte 'b'
-	mov [0xB8006], byte ' '
-	mov [0xB8008], byte 'k'
-	mov [0xB800a], byte 'e'
-	mov [0xB800c], byte 'r'
-	mov [0xB800e], byte 'n'
-	mov [0xB8010], byte 'e'
-	mov [0xB8012], byte 'l'
-	mov [0xB8014], byte '.'
-
-	cli
 	hlt
 
 
@@ -77,8 +63,8 @@ ProtectedMode32Bits:
 
 ;;;___CHANGE TO 64 BIT PROTECTED MODE HERE___;;;
 
-; %include "../AssemblyLanguageBootloader/BootModeInstructions/CentralProcessingUnitIdentifier.asm"
-; %include "../AssemblyLanguageBootloader/BootModeInstructions/SimplePaging.asm"
+; %include "../../AssemblyLanguageBootloader/BootModeInstructions/CentralProcessingUnitIdentifier.asm"
+; %include "../../AssemblyLanguageBootloader/BootModeInstructions/SimplePaging.asm"
 
 ; EnterProtectedMode64Bits:
 ; 	call DetectCPUID
@@ -102,4 +88,6 @@ ProtectedMode32Bits:
 ; 	cli
 ; 	hlt
 
-times 2048-($-$$) db 0
+VESA_MODE_INFO_BLOCK_ADDRESS: equ 0x6000
+
+times 8192-($-$$) db 0
