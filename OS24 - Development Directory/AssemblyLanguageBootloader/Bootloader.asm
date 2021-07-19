@@ -20,8 +20,8 @@ BOOT_DISK: db 0
 bootloaderString:
     db "Booted from floppy.", 0 
 
-%include "../AssemblyLanguageBootloader/SoftwareInstructions/Int0x10DisplayFunctions.asm"
-%include "../AssemblyLanguageBootloader/HardwareInstructions/ReadDiskFunctions.asm"
+%include "../../AssemblyLanguageBootloader/SoftwareInstructions/Int0x10DisplayFunctions.asm"
+%include "../../AssemblyLanguageBootloader/HardwareInstructions/ReadDiskFunctions.asm"
 
 times 510-($-$$) db 0
 

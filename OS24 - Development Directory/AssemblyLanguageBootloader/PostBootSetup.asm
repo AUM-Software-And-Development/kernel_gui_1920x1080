@@ -12,13 +12,13 @@
 
 postBootSetupString:
 	db "The boot from a disk was a success.", 0
-%include "../AssemblyLanguageBootloader/SoftwareInstructions/Int0x10DisplayFunctions.asm"
-%include "../AssemblyLanguageBootloader/HardwareInstructions/EnableVESA-EnableVBE.asm"
+%include "../../AssemblyLanguageBootloader/SoftwareInstructions/Int0x10DisplayFunctions.asm"
+%include "../../AssemblyLanguageBootloader/HardwareInstructions/EnableVESA-EnableVBE.asm"
 
 
 
 ;;;___BEGIN ENTERING 32 BIT PROTECTED MODE HERE___;;;
-%include "../AssemblyLanguageBootloader/BootModeInstructions/GlobalDescriptorTable.asm"
+%include "../../AssemblyLanguageBootloader/BootModeInstructions/GlobalDescriptorTable.asm"
 AfterGDTCodeDescriptor: equ GDTCodeDescriptor - GDTNullDescriptor
 AfterGDTDataDescriptor: equ GDTDataDescriptor - GDTNullDescriptor
                                                 ; The label gets the code or data section, but is named
@@ -39,7 +39,7 @@ EnableA20:
 	ret
 
 [bits 32]                                       ; From this point on, BIOS interrupts aren't operational
-%include "../AssemblyLanguageBootloader/SoftwareInstructions/VESADisplayFunctions.asm"
+%include "../../AssemblyLanguageBootloader/SoftwareInstructions/VESADisplayFunctions.asm"
 
 ProtectedMode32Bits:
 	mov ax, AfterGDTDataDescriptor
