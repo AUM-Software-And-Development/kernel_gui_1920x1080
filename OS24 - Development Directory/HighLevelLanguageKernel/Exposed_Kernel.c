@@ -1,6 +1,6 @@
 // Needs headers
 
-#include "DisplayInstructions/DisplayArrays.c"
+#include "SoftwareInstructions/DisplayInstructions/DisplayArrays.c"
 
 void Exposed_Kernel()
 {
