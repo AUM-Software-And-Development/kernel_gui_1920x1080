@@ -1,16 +1,7 @@
-Thank you for viewing this OS.
+This is for anyone interested in developing their own OS with a high resolution.
 
-It is kept as simple as possible for newcomers and me.
+It's all you need to get started.
 
-There are instructions on how to build this entire thing 
-on Windows and Linux.
+You can use this source code as you please.
 
-These instructions are fairly simple, and should be mostly 
-beginner friendly.
-
-These instructions were not included in my first commits, 
-since I hadn't thought of that yet.
-
-After this enters a High Level Language phase, I will 
-make a new git repo containing new sets of instructions 
-for all bit modes (16, 32, 64).
+The compilation folder has a couple of readmes with instructions on what to do. All of the Linux commands in Windows/Docker are the same on Linux natively, because Docker is just a host container for Linux. That means you can either run it on Windows, or on Linux. Both work.
