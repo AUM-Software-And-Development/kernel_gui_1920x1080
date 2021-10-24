@@ -1,1 +1,1 @@
-The intention of this project is to boot a "boilerplate" with VESA capabilities.
+The intention of this project is to boot a "boilerplate" with VESA.
